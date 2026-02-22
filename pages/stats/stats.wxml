@@ -1,28 +1,28 @@
 <view class="page">
-  <view class="topbar"><view class="title">成长分析</view></view>
+  <view class="topbar"><view class="title">成长统计</view></view>
 
-  <view class="content">
+  <view class="content" wx:if="{{space}}">
     <view class="card">
-      <view class="periods">
-        <view wx:for="{{periods}}" wx:key="*this" class="pill {{activePeriod===item?'pill-active':''}}" data-p="{{item}}" bindtap="switchPeriod">{{item}}</view>
+      <view class="section-title">双人成长面板</view>
+      <view class="user-panel" wx:for="{{panels}}" wx:key="id">
+        <image class="avatar" src="{{item.avatarUrl || 'https://dummyimage.com/120x120/f2f2f2/999&text=+'}}" mode="aspectFill" />
+        <view class="info">
+          <view class="name">{{item.nickname}}</view>
+          <view class="meta">累计打卡：{{item.checkins}} 次</view>
+          <view class="meta">累计积分：{{item.points}} 分</view>
+        </view>
       </view>
-
-      <view class="line">{{aName}}：{{activePeriod}} 科技树 +{{aTech}} 分 · 情感树 +{{aEmotion}} 分</view>
-      <view class="line">{{bName}}：{{activePeriod}} 科技树 +{{bTech}} 分 · 情感树 +{{bEmotion}} 分</view>
-
-      <view class="compare">进步对比（{{activePeriod}}）</view>
-      <view class="small">科技树对比线</view>
-      <view class="bar-bg"><view class="bar a" style="width: {{(aTech/(aTech+bTech||1))*100}}%"></view></view>
-      <view class="small">情感树对比线</view>
-      <view class="bar-bg"><view class="bar b" style="width: {{(aEmotion/(aEmotion+bEmotion||1))*100}}%"></view></view>
     </view>
 
     <view class="card">
-      <view class="panel-title">💰 我的成长面板</view>
-      <view>用户：{{aName}}</view>
-      <view class="line2">科技树：{{aTech}} 分</view>
-      <view class="line2">情感树：{{aEmotion}} 分</view>
-      <view class="line2">合计：{{aTech + aEmotion}} 分</view>
+      <view class="section-title">空间总览</view>
+      <view class="meta">任务数：{{space.tasks.length}}</view>
+      <view class="meta">奖励数：{{space.rewards.length}}</view>
+      <view class="meta">删除打卡次数：{{space.deletedCheckins}}</view>
     </view>
+  </view>
+
+  <view class="content" wx:else>
+    <view class="card">请先创建或加入成长空间。</view>
   </view>
 </view>

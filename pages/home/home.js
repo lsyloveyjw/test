@@ -1,68 +1,145 @@
-const { formatDate, formatTime, daysSince, daysUntil } = require('../../utils/date');
-const { getProfile, saveProfile, getTasks, initTasks, updateTaskProgress, addRecord } = require('../../utils/storage');
+const {
+  getCurrentUser,
+  registerUser,
+  updateCurrentUser,
+  createSpace,
+  joinSpace,
+  getActiveSpace,
+  addTask,
+  updateTask,
+  deleteTask,
+  checkInTask,
+  undoCheckInTask
+} = require('../../utils/storage');
 
 Page({
   data: {
-    ownerList: ['呱呱', '咩'],
-    owner: '呱呱',
-    profile: { anniversaryDate: '2024-01-01', nextMilestone: '02-14' },
-    loveDays: 0,
-    countdownDays: 0,
-    tasks: [],
-    customTaskTitle: '',
-    customTaskDesc: ''
+    user: null,
+    nicknameInput: '',
+    joinCode: '',
+    space: null,
+    taskTitle: '',
+    taskPoints: 1,
+    editTaskId: '',
+    editTaskTitle: '',
+    editTaskPoints: 1
   },
 
   onShow() {
-    initTasks();
-    this.refreshPage();
+    this.refresh();
   },
 
-  refreshPage() {
-    const profile = getProfile();
+  refresh() {
     this.setData({
-      profile,
-      loveDays: Math.max(0, daysSince(profile.anniversaryDate)) + 1,
-      countdownDays: daysUntil(profile.nextMilestone),
-      tasks: getTasks()
+      user: getCurrentUser(),
+      space: getActiveSpace(),
+      memberCount: getActiveSpace() ? Object.keys(getActiveSpace().members).length : 0
     });
   },
 
-  switchOwner(e) {
-    this.setData({ owner: e.currentTarget.dataset.owner });
+  onNicknameInput(e) {
+    this.setData({ nicknameInput: e.detail.value });
   },
 
-  onAnniversaryInput(e) {
-    this.setData({ 'profile.anniversaryDate': e.detail.value });
-  },
-
-  onMilestoneInput(e) {
-    this.setData({ 'profile.nextMilestone': e.detail.value });
-  },
-
-  saveDates() {
-    saveProfile(this.data.profile);
-    this.refreshPage();
-    wx.showToast({ title: '已保存', icon: 'success' });
-  },
-
-  finishTask(e) {
-    const id = e.currentTarget.dataset.id;
-    const tasks = updateTaskProgress(id);
-    const task = tasks.find((t) => t.id === id);
-
-    addRecord({
-      id: `${Date.now()}`,
-      type: 'growth',
-      owner: this.data.owner,
-      note: `${task.title} +${task.points}分`,
-      tree: task.tree,
-      date: formatDate(),
-      time: formatTime(),
-      createdAt: Date.now()
+  chooseAvatar() {
+    wx.chooseImage({
+      count: 1,
+      success: (res) => {
+        const avatarUrl = res.tempFilePaths[0];
+        if (this.data.user) {
+          updateCurrentUser({ avatarUrl });
+        }
+        this.setData({ user: { ...(this.data.user || {}), avatarUrl } });
+      }
     });
+  },
 
-    this.setData({ tasks });
-    wx.showToast({ title: '+1 成长值', icon: 'success' });
+  register() {
+    if (!this.data.nicknameInput.trim()) {
+      wx.showToast({ title: '请输入昵称', icon: 'none' });
+      return;
+    }
+    const avatarUrl = (this.data.user && this.data.user.avatarUrl) || '';
+    registerUser({ nickname: this.data.nicknameInput.trim(), avatarUrl });
+    this.refresh();
+  },
+
+  createGrowthSpace() {
+    const user = getCurrentUser();
+    if (!user) return;
+    createSpace(user);
+    this.refresh();
+  },
+
+  onCodeInput(e) {
+    this.setData({ joinCode: e.detail.value });
+  },
+
+  joinGrowthSpace() {
+    const user = getCurrentUser();
+    if (!user || !this.data.joinCode.trim()) return;
+    const joined = joinSpace(this.data.joinCode.trim(), user);
+    if (!joined) {
+      wx.showToast({ title: '绑定码无效', icon: 'none' });
+      return;
+    }
+    this.setData({ joinCode: '' });
+    this.refresh();
+  },
+
+  onTaskTitleInput(e) {
+    this.setData({ taskTitle: e.detail.value });
+  },
+
+  onTaskPointsInput(e) {
+    this.setData({ taskPoints: Number(e.detail.value) || 1 });
+  },
+
+  addTaskItem() {
+    if (!this.data.taskTitle.trim()) return;
+    addTask({ title: this.data.taskTitle.trim(), points: this.data.taskPoints });
+    this.setData({ taskTitle: '', taskPoints: 1 });
+    this.refresh();
+  },
+
+  beginEditTask(e) {
+    const { id, title, points } = e.currentTarget.dataset;
+    this.setData({ editTaskId: id, editTaskTitle: title, editTaskPoints: Number(points) || 1 });
+  },
+
+  onEditTaskTitleInput(e) {
+    this.setData({ editTaskTitle: e.detail.value });
+  },
+
+  onEditTaskPointsInput(e) {
+    this.setData({ editTaskPoints: Number(e.detail.value) || 1 });
+  },
+
+  saveEditTask() {
+    updateTask(this.data.editTaskId, {
+      title: this.data.editTaskTitle.trim(),
+      points: this.data.editTaskPoints
+    });
+    this.setData({ editTaskId: '' });
+    this.refresh();
+  },
+
+  removeTask(e) {
+    deleteTask(e.currentTarget.dataset.id);
+    this.refresh();
+  },
+
+  doCheckIn(e) {
+    const user = this.data.user;
+    if (!user) return;
+    checkInTask(e.currentTarget.dataset.id, user.id);
+    this.refresh();
+  },
+
+  undoCheckIn(e) {
+    const user = this.data.user;
+    if (!user) return;
+    undoCheckInTask(e.currentTarget.dataset.id, user.id);
+    this.refresh();
   }
 });

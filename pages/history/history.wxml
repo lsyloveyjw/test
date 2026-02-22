@@ -1,30 +1,32 @@
 <view class="page">
-  <view class="topbar"><view class="title">成长商城</view></view>
-  <view class="content">
-    <input class="search" placeholder="搜索商品" bindinput="onSearch" />
+  <view class="topbar"><view class="title">奖励</view></view>
+  <view class="content" wx:if="{{space}}">
+    <view class="card">
+      <view class="section-title">奖励</view>
+      <view class="row">
+        <input class="input inline" placeholder="奖励名称" value="{{rewardTitle}}" bindinput="onRewardTitleInput" />
+        <input class="input points" type="number" value="{{rewardPoints}}" bindinput="onRewardPointsInput" />
+      </view>
+      <button class="btn" bindtap="addRewardItem">新增奖励</button>
+    </view>
 
-    <view class="group-title">货架 <text class="badge">{{onlineItems.length}}</text></view>
-    <view class="list-card">
-      <view class="item" wx:for="{{onlineItems}}" wx:key="id">
-        <view>
-          <view class="name">{{item.title}}</view>
-          <view class="meta">💰 {{item.points}} 积分</view>
-          <view class="date">📅 {{item.date}} 创建</view>
-        </view>
-        <view class="icon">{{item.icon}}</view>
+    <view class="reward-card" wx:for="{{space.rewards}}" wx:key="id">
+      <view class="name">{{item.title}}</view>
+      <view class="meta">💰 {{item.points}} 积分</view>
+      <view class="actions">
+        <button size="mini" class="btn-mini secondary" data-id="{{item.id}}" data-title="{{item.title}}" data-points="{{item.points}}" bindtap="beginEdit">修改</button>
+        <button size="mini" class="btn-mini danger" data-id="{{item.id}}" bindtap="removeReward">删除</button>
       </view>
     </view>
 
-    <view class="group-title">已下架 <text class="badge">{{offlineItems.length}}</text></view>
-    <view class="list-card">
-      <view class="item" wx:for="{{offlineItems}}" wx:key="id">
-        <view>
-          <view class="name">{{item.title}}</view>
-          <view class="meta">💰 {{item.points}} 积分</view>
-          <view class="date">📅 {{item.date}} 创建</view>
-        </view>
-        <view class="icon">{{item.icon}}</view>
-      </view>
+    <view class="card" wx:if="{{editRewardId}}">
+      <view class="section-title">修改奖励</view>
+      <input class="input" value="{{editRewardTitle}}" bindinput="onEditRewardTitleInput" />
+      <input class="input" type="number" value="{{editRewardPoints}}" bindinput="onEditRewardPointsInput" />
+      <button class="btn" bindtap="saveEdit">保存修改</button>
     </view>
+  </view>
+  <view class="content" wx:else>
+    <view class="card">请先在成长空间创建或加入绑定空间。</view>
   </view>
 </view>

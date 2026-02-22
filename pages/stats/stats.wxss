@@ -1,17 +1,11 @@
-page { background:#f3f3f3; }
-.topbar { background:#f79ab2; padding:24rpx; padding-top:48rpx; }
-.title { text-align:center; font-size:46rpx; font-weight:700; }
+page { background:#f5f5f5; font-family:'YouYuan','PingFang SC','Comic Sans MS',sans-serif; }
+.topbar { background:#f79ab2; padding:28rpx 24rpx; padding-top:52rpx; }
+.title { text-align:center; font-size:48rpx; font-weight:700; }
 .content { padding:20rpx; }
-.card { background:#fff; border-radius:24rpx; padding:20rpx; margin-bottom:20rpx; }
-.periods { display:flex; gap:10rpx; margin-bottom:16rpx; }
-.pill { flex:1; text-align:center; padding:10rpx 0; border:1px solid #ddd; border-radius:999rpx; color:#444; }
-.pill-active { background:#111; color:#fff; border-color:#111; }
-.line { color:#444; margin: 8rpx 0; }
-.compare { margin-top: 16rpx; font-size:34rpx; font-weight:700; }
-.small { color:#666; margin-top: 10rpx; }
-.bar-bg { background:#ebedf3; border-radius:999rpx; overflow:hidden; height:22rpx; }
-.bar { height:22rpx; border-radius:999rpx; }
-.bar.a { background:#f094b0; }
-.bar.b { background:#86afe8; }
-.panel-title { font-size:34rpx; font-weight:700; margin-bottom:10rpx; }
-.line2 { color:#555; margin-top:6rpx; }
+.card { background:#fff; border-radius:24rpx; padding:20rpx; margin-bottom:16rpx; }
+.section-title { font-size:34rpx; font-weight:700; margin-bottom:12rpx; }
+.user-panel { display:flex; align-items:center; gap:14rpx; padding:12rpx 0; border-bottom:1px solid #f1f1f1; }
+.user-panel:last-child { border-bottom:none; }
+.avatar { width:96rpx; height:96rpx; border-radius:50%; background:#eee; }
+.name { font-size:32rpx; font-weight:700; }
+.meta { color:#666; margin-top:4rpx; }

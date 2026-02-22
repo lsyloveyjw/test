@@ -5,24 +5,24 @@
     "pages/stats/stats"
   ],
   "window": {
-    "navigationBarTitleText": "打卡记事",
-    "navigationBarBackgroundColor": "#ffd3df",
+    "navigationBarTitleText": "成长空间",
+    "navigationBarBackgroundColor": "#f79ab2",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "light",
-    "backgroundColor": "#fff5f8"
+    "backgroundColor": "#f5f5f5"
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#ff5f8a",
+    "selectedColor": "#f46c95",
     "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "打卡"
+        "text": "成长空间"
       },
       {
         "pagePath": "pages/history/history",
-        "text": "记录"
+        "text": "奖励"
       },
       {
         "pagePath": "pages/stats/stats",
