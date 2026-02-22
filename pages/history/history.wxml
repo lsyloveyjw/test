@@ -1,0 +1,13 @@
+<view class="container">
+  <scroll-view class="tag-scroll" scroll-x="true" enable-flex="true">
+    <view wx:for="{{tags}}" wx:key="*this" class="f-tag {{filterTag===item?'f-tag-active':''}}" data-tag="{{item}}" bindtap="onFilterTap">{{item}}</view>
+  </scroll-view>
+
+  <view class="card" wx:if="{{filteredRecords.length === 0}}">暂无记录，去首页先打卡吧。</view>
+
+  <view class="card item" wx:for="{{filteredRecords}}" wx:key="id">
+    <view class="row"><text>{{item.mood || '🙂'}} {{item.tag}}</text><text class="time">{{item.date}} {{item.time}}</text></view>
+    <view class="note">{{item.note || '无备注'}}</view>
+    <button class="mini-btn" data-id="{{item.id}}" bindtap="handleDelete">删除</button>
+  </view>
+</view>

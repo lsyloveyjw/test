@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/history/history",
+    "pages/stats/stats"
+  ],
+  "window": {
+    "navigationBarTitleText": "打卡记事",
+    "navigationBarBackgroundColor": "#ffd3df",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#fff5f8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#ff5f8a",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "打卡"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "记录"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,4 @@
+{
+  "desc": "打卡记事小程序 sitemap",
+  "rules": [{"action": "allow", "page": "*"}]
+}

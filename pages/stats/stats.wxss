@@ -1,0 +1,9 @@
+.container { padding:24rpx; }
+.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16rpx; }
+.stat { text-align:center; }
+.full { grid-column: 1 / span 2; }
+.k { color:#888; }
+.v { color:#ff4f7b; font-size:50rpx; font-weight:700; margin-top:8rpx; }
+.title { font-weight:700; margin-bottom: 10rpx; }
+.row { display:flex; justify-content:space-between; padding:10rpx 0; border-bottom:1px dashed #ffd7e1; }
+.empty { color:#888; text-align:center; }

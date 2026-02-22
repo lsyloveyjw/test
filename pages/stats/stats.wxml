@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="grid">
+    <view class="card stat"><view class="k">总打卡</view><view class="v">{{total}}</view></view>
+    <view class="card stat"><view class="k">活跃天数</view><view class="v">{{activeDays}}</view></view>
+    <view class="card stat full"><view class="k">连续打卡</view><view class="v">{{currentStreak}} 天</view></view>
+  </view>
+
+  <view class="card">
+    <view class="title">分类统计</view>
+    <view wx:if="{{tagSummary.length === 0}}" class="empty">暂无数据</view>
+    <view wx:for="{{tagSummary}}" wx:key="tag" class="row"><text>{{item.tag}}</text><text>{{item.count}} 次</text></view>
+  </view>
+
+  <view class="card">
+    <view class="title">最近 14 天</view>
+    <view wx:if="{{dateSummary.length === 0}}" class="empty">暂无数据</view>
+    <view wx:for="{{dateSummary}}" wx:key="date" class="row"><text>{{item.date}}</text><text>{{item.count}} 次</text></view>
+  </view>
+</view>

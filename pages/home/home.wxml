@@ -1,0 +1,29 @@
+<view class="container">
+  <view class="card header">
+    <view class="title">🌈 Rainbow Cats 打卡记事</view>
+    <view class="subtitle">今日已完成 {{todayCount}} 次，坚持就会发光。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">1) 选择打卡分类</view>
+    <view class="tags">
+      <view wx:for="{{tags}}" wx:key="*this" class="tag {{selectedTag === item ? 'tag-active' : ''}}" bindtap="onTagTap" data-tag="{{item}}">{{item}}</view>
+    </view>
+
+    <view class="section-title">2) 选择心情</view>
+    <view class="moods">
+      <view wx:for="{{moods}}" wx:key="*this" class="mood {{mood === item ? 'mood-active' : ''}}" bindtap="onMoodTap" data-mood="{{item}}">{{item}}</view>
+    </view>
+
+    <view class="section-title">3) 记录备注</view>
+    <textarea class="note" maxlength="200" placeholder="比如：完成了 30 分钟英语听力" value="{{note}}" bindinput="onNoteInput" />
+
+    <button class="btn-primary" bindtap="handleClockIn">立即打卡</button>
+  </view>
+
+  <view class="card" wx:if="{{latestRecord}}">
+    <view class="section-title">最近记录</view>
+    <view>{{latestRecord.mood}} {{latestRecord.tag}} · {{latestRecord.note || '无备注'}}</view>
+    <view class="time">{{latestRecord.date}} {{latestRecord.time}}</view>
+  </view>
+</view>

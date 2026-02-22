@@ -1,0 +1,12 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "clockin-notes",
+  "description": "打卡记事微信小程序",
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "setting": {
+    "es6": true,
+    "minified": true,
+    "enhance": true
+  }
+}
