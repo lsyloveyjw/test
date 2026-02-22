@@ -23,3 +23,27 @@
 1. 微信开发者工具导入当前目录
 2. 修改 `project.config.json` 中 `appid`
 3. 运行并在首页先配置纪念日
+
+## 常见问题（关键）
+
+### 报错：`app.json 在项目根目录未找到`
+这通常是**导入目录选错层级**导致的。
+
+请确保你在微信开发者工具里导入的是**包含 `app.json` 的那个目录**，不是它的上级目录。
+
+正确目录应至少包含：
+
+- `app.json`
+- `app.js`
+- `project.config.json`
+- `pages/`
+
+如果你必须从上级目录导入，请把 `project.config.json` 的 `miniprogramRoot` 改为实际子目录，例如：
+
+```json
+{
+  "miniprogramRoot": "./test-codex-create-punch-clock-wechat-mini-program/"
+}
+```
+
+并确认该子目录内存在 `app.json`。
