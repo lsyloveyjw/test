@@ -1,14 +1,14 @@
-<view class="page">
-  <view class="top">成长空间绑定</view>
-  <view class="card">
-    <image class="avatar" src="{{user.avatarUrl}}" mode="aspectFill" />
-    <view class="name">{{user.nickname}}</view>
-    <view class="tip">你还没有绑定成长空间，请选择创建或加入。</view>
-  </view>
-
-  <view class="card">
-    <button class="btn" bindtap="handleCreate">创建成长空间（生成绑定码）</button>
+<view class="login-page">
+  <image class="bg" src="https://dummyimage.com/750x1334/e8f6d8/9dbf88&text=Bind+Space" mode="aspectFill" />
+  <view class="mask-card">
+    <view class="title">绑定成长空间</view>
+    <view class="user-box">
+      <image class="avatar" src="{{user.avatarUrl}}" mode="aspectFill" />
+      <view class="name">{{user.nickname}}</view>
+    </view>
+    <view class="sub">你还没有绑定空间，创建新空间或输入绑定码加入。</view>
+    <button class="btn-login" bindtap="handleCreate">创建成长空间（生成绑定码）</button>
     <input class="input" placeholder="输入绑定码加入" value="{{joinCode}}" bindinput="onCodeInput" />
-    <button class="btn second" bindtap="handleJoin">通过绑定码加入</button>
+    <button class="btn-ghost" bindtap="handleJoin">通过绑定码加入</button>
   </view>
 </view>

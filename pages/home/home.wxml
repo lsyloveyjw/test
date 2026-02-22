@@ -1,33 +1,82 @@
 <view class="page" wx:if="{{space}}">
-  <view class="topbar"><view class="title">成长空间</view></view>
+  <view class="topbar"><view class="title">成长打卡中心</view></view>
 
   <view class="content">
-    <view class="card">
-      <view class="meta">Operator: {{user.nickname}} | 绑定码: {{space.code}}</view>
-    </view>
+    <view class="operator">Operator: {{user.nickname}} | Owner: {{user.nickname}} | Module: {{taskGroup}}</view>
 
-    <view class="section-title">自定义任务 <text class="badge">{{space.tasks.length}}</text></view>
     <view class="card">
+      <view class="section-title">Skill Modules</view>
+      <view class="chips">
+        <view class="chip {{taskGroup==='Discovery'?'active':''}}" data-g="Discovery" bindtap="onGroupChange">Discovery</view>
+        <view class="chip {{taskGroup==='Creation'?'active':''}}" data-g="Creation" bindtap="onGroupChange">Creation</view>
+        <view class="chip {{taskGroup==='Custom'?'active':''}}" data-g="Custom" bindtap="onGroupChange">Custom</view>
+      </view>
       <input class="input" placeholder="任务标题" value="{{taskTitle}}" bindinput="onTaskTitleInput" />
+      <input class="input" placeholder="任务描述" value="{{taskDesc}}" bindinput="onTaskDescInput" />
       <input class="input" type="number" placeholder="积分（默认1）" value="{{taskPoints}}" bindinput="onTaskPointsInput" />
       <button class="btn" bindtap="addTaskItem">+ 新增自定义任务</button>
     </view>
 
-    <view class="section-title">待打卡 <text class="badge">{{space.tasks.length}}</text></view>
-    <view class="task-card" wx:for="{{space.tasks}}" wx:key="id">
-      <view class="task-title">{{item.title}}</view>
-      <view class="task-desc">💗 +{{item.points}} 分 · 总 {{item.doneCount}} 次</view>
-      <view class="actions">
-        <button size="mini" class="btn-mini" data-id="{{item.id}}" bindtap="doCheckIn">打卡+1</button>
-        <button size="mini" class="btn-mini second" data-id="{{item.id}}" bindtap="undoCheckIn">删除1次</button>
-        <button size="mini" class="btn-mini second" data-id="{{item.id}}" data-title="{{item.title}}" data-points="{{item.points}}" bindtap="beginEditTask">修改</button>
-        <button size="mini" class="btn-mini danger" data-id="{{item.id}}" bindtap="removeTask">删除任务</button>
+    <view class="group-card" wx:if="{{groups.discovery.length}}">
+      <view class="group-title">Discovery <text class="badge">{{groups.discovery.length}}</text></view>
+      <view class="task-row" wx:for="{{groups.discovery}}" wx:key="id">
+        <view class="task-main">
+          <view class="task-title">{{item.title}}</view>
+          <view class="task-desc">{{item.desc}}</view>
+          <view class="task-foot">💰 +{{item.points}} Tech Points · {{item.doneCount}} 次</view>
+        </view>
+        <view class="check-col">
+          <button size="mini" class="mini" data-id="{{item.id}}" bindtap="doCheckIn">□</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" bindtap="undoCheckIn">-1</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" data-title="{{item.title}}" data-desc="{{item.desc}}" data-points="{{item.points}}" data-group="{{item.group}}" bindtap="beginEditTask">改</button>
+          <button size="mini" class="mini danger" data-id="{{item.id}}" bindtap="removeTask">删</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="group-card creation" wx:if="{{groups.creation.length}}">
+      <view class="group-title">Creation <text class="badge">{{groups.creation.length}}</text></view>
+      <view class="task-row" wx:for="{{groups.creation}}" wx:key="id">
+        <view class="task-main">
+          <view class="task-title">{{item.title}}</view>
+          <view class="task-desc">{{item.desc}}</view>
+          <view class="task-foot">💰 +{{item.points}} Tech Points · {{item.doneCount}} 次</view>
+        </view>
+        <view class="check-col">
+          <button size="mini" class="mini" data-id="{{item.id}}" bindtap="doCheckIn">□</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" bindtap="undoCheckIn">-1</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" data-title="{{item.title}}" data-desc="{{item.desc}}" data-points="{{item.points}}" data-group="{{item.group}}" bindtap="beginEditTask">改</button>
+          <button size="mini" class="mini danger" data-id="{{item.id}}" bindtap="removeTask">删</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="group-card" wx:if="{{groups.custom.length}}">
+      <view class="group-title">Custom <text class="badge">{{groups.custom.length}}</text></view>
+      <view class="task-row" wx:for="{{groups.custom}}" wx:key="id">
+        <view class="task-main">
+          <view class="task-title">{{item.title}}</view>
+          <view class="task-desc">{{item.desc}}</view>
+          <view class="task-foot">💰 +{{item.points}} Tech Points · {{item.doneCount}} 次</view>
+        </view>
+        <view class="check-col">
+          <button size="mini" class="mini" data-id="{{item.id}}" bindtap="doCheckIn">□</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" bindtap="undoCheckIn">-1</button>
+          <button size="mini" class="mini second" data-id="{{item.id}}" data-title="{{item.title}}" data-desc="{{item.desc}}" data-points="{{item.points}}" data-group="{{item.group}}" bindtap="beginEditTask">改</button>
+          <button size="mini" class="mini danger" data-id="{{item.id}}" bindtap="removeTask">删</button>
+        </view>
       </view>
     </view>
 
     <view class="card" wx:if="{{editTaskId}}">
       <view class="section-title">修改任务</view>
+      <view class="chips">
+        <view class="chip {{editTaskGroup==='Discovery'?'active':''}}" data-g="Discovery" bindtap="onEditGroupChange">Discovery</view>
+        <view class="chip {{editTaskGroup==='Creation'?'active':''}}" data-g="Creation" bindtap="onEditGroupChange">Creation</view>
+        <view class="chip {{editTaskGroup==='Custom'?'active':''}}" data-g="Custom" bindtap="onEditGroupChange">Custom</view>
+      </view>
       <input class="input" value="{{editTaskTitle}}" bindinput="onEditTaskTitleInput" />
+      <input class="input" value="{{editTaskDesc}}" bindinput="onEditTaskDescInput" />
       <input class="input" type="number" value="{{editTaskPoints}}" bindinput="onEditTaskPointsInput" />
       <button class="btn" bindtap="saveEditTask">保存修改</button>
     </view>

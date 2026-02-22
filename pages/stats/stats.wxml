@@ -1,28 +1,30 @@
 <view class="page">
-  <view class="topbar"><view class="title">成长统计</view></view>
+  <view class="topbar"><view class="title">成长分析</view></view>
 
   <view class="content" wx:if="{{space}}">
+    <view class="banner card">绑定码：<text class="code">{{space.code}}</text></view>
+
     <view class="card">
-      <view class="section-title">双人成长面板</view>
-      <view class="user-panel" wx:for="{{panels}}" wx:key="id">
-        <image class="avatar" src="{{item.avatarUrl || 'https://dummyimage.com/120x120/f2f2f2/999&text=+'}}" mode="aspectFill" />
-        <view class="info">
+      <view class="periods">
+        <view wx:for="{{periods}}" wx:key="*this" class="pill {{activePeriod===item?'pill-active':''}}" data-p="{{item}}" bindtap="switchPeriod">{{item}}</view>
+      </view>
+      <view class="panel" wx:for="{{panels}}" wx:key="id">
+        <image class="avatar" src="{{item.avatarUrl}}" mode="aspectFill" />
+        <view class="txt">
           <view class="name">{{item.nickname}}</view>
-          <view class="meta">累计打卡：{{item.checkins}} 次</view>
-          <view class="meta">累计积分：{{item.points}} 分</view>
+          <view class="meta">{{activePeriod}}：Discovery +{{item.discovery}} · Creation +{{item.creation}}</view>
+          <view class="meta">合计 +{{item.points}} 分 · 打卡 {{item.checkins}} 次</view>
         </view>
       </view>
     </view>
 
     <view class="card">
-      <view class="section-title">空间总览</view>
-      <view class="meta">任务数：{{space.tasks.length}}</view>
-      <view class="meta">奖励数：{{space.rewards.length}}</view>
       <view class="meta">删除打卡次数：{{space.deletedCheckins}}</view>
+      <button class="exit-btn" bindtap="handleExitSpace">退出空间并返回登录</button>
     </view>
   </view>
 
   <view class="content" wx:else>
-    <view class="card">请先创建或加入成长空间。</view>
+    <view class="card">请先绑定成长空间。</view>
   </view>
 </view>
