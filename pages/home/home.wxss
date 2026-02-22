@@ -1,21 +1,16 @@
-page { background: #f5f5f5; font-family: 'YouYuan', 'PingFang SC', 'Comic Sans MS', sans-serif; }
+page { background:#f3f3f3; font-family:'YouYuan','PingFang SC','Comic Sans MS',sans-serif; }
 .topbar { background:#f79ab2; padding:28rpx 24rpx; padding-top:52rpx; }
 .title { text-align:center; font-size:48rpx; font-weight:700; }
-.content { padding: 20rpx; }
-.card,.task-card { background:#fff; border-radius:24rpx; padding:20rpx; margin-bottom:16rpx; box-shadow: 0 6rpx 20rpx rgba(0,0,0,.04); }
-.profile-card { display:flex; flex-direction:column; align-items:center; gap:10rpx; }
-.avatar { width:120rpx; height:120rpx; border-radius:50%; background:#eee; }
-.name { font-size:34rpx; font-weight:700; }
-.section-title { font-size:34rpx; font-weight:700; margin-bottom:10rpx; color:#333; }
-.hint { color:#888; margin-top:6rpx; }
-.code { color:#ff5b8a; font-weight:700; }
-.row { display:flex; gap:10rpx; }
+.content { padding:20rpx; }
+.card,.task-card { background:#fff; border-radius:24rpx; padding:20rpx; margin-bottom:16rpx; }
+.meta { color:#666; }
+.section-title { font-size:40rpx; color:#555; margin:14rpx 0; }
+.badge { background:#ff5b6a; color:#fff; border-radius:999rpx; padding:0 12rpx; font-size:24rpx; }
 .input { background:#fafafa; border:1px solid #eee; border-radius:12rpx; padding:12rpx 14rpx; margin-bottom:10rpx; }
-.inline { flex:1; }
-.points { width:140rpx; }
 .btn { background:#f48ea8; color:#fff; border:none; }
-.secondary { background:#fff; color:#555; border:1px solid #e2e2e2; }
-.danger { background:#fff0f0; color:#da3f3f; border:1px solid #f4bcbc; }
-.task-title { font-size:32rpx; font-weight:700; }
+.task-title { font-size:38rpx; font-weight:700; }
+.task-desc { color:#c64f7a; margin-top:6rpx; }
 .actions { display:flex; flex-wrap:wrap; gap:8rpx; margin-top:10rpx; }
 .btn-mini { background:#111; color:#fff; }
+.second { background:#fff; color:#555; border:1px solid #ddd; }
+.danger { background:#fff0f0; color:#da3f3f; border:1px solid #f4bcbc; }

@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/login/login",
+    "pages/bind/bind",
     "pages/home/home",
     "pages/history/history",
     "pages/stats/stats"

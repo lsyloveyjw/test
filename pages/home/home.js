@@ -1,9 +1,5 @@
 const {
   getCurrentUser,
-  registerUser,
-  updateCurrentUser,
-  createSpace,
-  joinSpace,
   getActiveSpace,
   addTask,
   updateTask,
@@ -15,8 +11,6 @@ const {
 Page({
   data: {
     user: null,
-    nicknameInput: '',
-    joinCode: '',
     space: null,
     taskTitle: '',
     taskPoints: 1,
@@ -26,65 +20,21 @@ Page({
   },
 
   onShow() {
-    this.refresh();
-  },
-
-  refresh() {
-    this.setData({
-      user: getCurrentUser(),
-      space: getActiveSpace(),
-      memberCount: getActiveSpace() ? Object.keys(getActiveSpace().members).length : 0
-    });
-  },
-
-  onNicknameInput(e) {
-    this.setData({ nicknameInput: e.detail.value });
-  },
-
-  chooseAvatar() {
-    wx.chooseImage({
-      count: 1,
-      success: (res) => {
-        const avatarUrl = res.tempFilePaths[0];
-        if (this.data.user) {
-          updateCurrentUser({ avatarUrl });
-        }
-        this.setData({ user: { ...(this.data.user || {}), avatarUrl } });
-      }
-    });
-  },
-
-  register() {
-    if (!this.data.nicknameInput.trim()) {
-      wx.showToast({ title: '请输入昵称', icon: 'none' });
+    const user = getCurrentUser();
+    const space = getActiveSpace();
+    if (!user) {
+      wx.redirectTo({ url: '/pages/login/login' });
       return;
     }
-    const avatarUrl = (this.data.user && this.data.user.avatarUrl) || '';
-    registerUser({ nickname: this.data.nicknameInput.trim(), avatarUrl });
-    this.refresh();
-  },
-
-  createGrowthSpace() {
-    const user = getCurrentUser();
-    if (!user) return;
-    createSpace(user);
-    this.refresh();
-  },
-
-  onCodeInput(e) {
-    this.setData({ joinCode: e.detail.value });
-  },
-
-  joinGrowthSpace() {
-    const user = getCurrentUser();
-    if (!user || !this.data.joinCode.trim()) return;
-    const joined = joinSpace(this.data.joinCode.trim(), user);
-    if (!joined) {
-      wx.showToast({ title: '绑定码无效', icon: 'none' });
+    if (!space) {
+      wx.redirectTo({ url: '/pages/bind/bind' });
       return;
     }
-    this.setData({ joinCode: '' });
-    this.refresh();
+    this.setData({ user, space });
+  },
+
+  refreshSpace() {
+    this.setData({ space: getActiveSpace() });
   },
 
   onTaskTitleInput(e) {
@@ -96,10 +46,11 @@ Page({
   },
 
   addTaskItem() {
-    if (!this.data.taskTitle.trim()) return;
-    addTask({ title: this.data.taskTitle.trim(), points: this.data.taskPoints });
+    const title = this.data.taskTitle.trim();
+    if (!title) return;
+    addTask({ title, points: this.data.taskPoints });
     this.setData({ taskTitle: '', taskPoints: 1 });
-    this.refresh();
+    this.refreshSpace();
   },
 
   beginEditTask(e) {
@@ -121,25 +72,21 @@ Page({
       points: this.data.editTaskPoints
     });
     this.setData({ editTaskId: '' });
-    this.refresh();
+    this.refreshSpace();
   },
 
   removeTask(e) {
     deleteTask(e.currentTarget.dataset.id);
-    this.refresh();
+    this.refreshSpace();
   },
 
   doCheckIn(e) {
-    const user = this.data.user;
-    if (!user) return;
-    checkInTask(e.currentTarget.dataset.id, user.id);
-    this.refresh();
+    checkInTask(e.currentTarget.dataset.id, this.data.user.id);
+    this.refreshSpace();
   },
 
   undoCheckIn(e) {
-    const user = this.data.user;
-    if (!user) return;
-    undoCheckInTask(e.currentTarget.dataset.id, user.id);
-    this.refresh();
+    undoCheckInTask(e.currentTarget.dataset.id, this.data.user.id);
+    this.refreshSpace();
   }
 });

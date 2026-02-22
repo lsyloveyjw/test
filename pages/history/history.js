@@ -1,4 +1,4 @@
-const { getActiveSpace, addReward, updateReward, deleteReward } = require('../../utils/storage');
+const { getCurrentUser, getActiveSpace, addReward, updateReward, deleteReward } = require('../../utils/storage');
 
 Page({
   data: {
@@ -11,6 +11,11 @@ Page({
   },
 
   onShow() {
+    const user = getCurrentUser();
+    if (!user) {
+      wx.redirectTo({ url: '/pages/login/login' });
+      return;
+    }
     this.refresh();
   },
 

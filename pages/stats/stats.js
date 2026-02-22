@@ -1,4 +1,4 @@
-const { getActiveSpace, getMemberPanels } = require('../../utils/storage');
+const { getCurrentUser, getActiveSpace, getMemberPanels } = require('../../utils/storage');
 
 Page({
   data: {
@@ -7,6 +7,11 @@ Page({
   },
 
   onShow() {
+    const user = getCurrentUser();
+    if (!user) {
+      wx.redirectTo({ url: '/pages/login/login' });
+      return;
+    }
     const space = getActiveSpace();
     this.setData({
       space,

@@ -1,0 +1,9 @@
+<view class="login-page">
+  <image class="bg" src="https://dummyimage.com/750x1334/e8f6d8/9dbf88&text=Growth+Space" mode="aspectFill" />
+  <view class="mask-card">
+    <view class="title">欢迎您 👋</view>
+    <view class="sub">这里是成长空间，登录后可创建或加入双人成长空间。</view>
+    <button class="btn-login" bindtap="handleWxLogin">立即登录</button>
+    <view class="agreement">登录即默认同意《隐私协议》与《服务协议》</view>
+  </view>
+</view>

@@ -1,60 +1,32 @@
-<view class="page">
+<view class="page" wx:if="{{space}}">
   <view class="topbar"><view class="title">成长空间</view></view>
 
-  <view class="content" wx:if="{{!user}}">
+  <view class="content">
     <view class="card">
-      <view class="section-title">微信用户注册</view>
-      <view class="hint">先填写昵称并上传头像</view>
-      <input class="input" placeholder="请输入昵称" bindinput="onNicknameInput" />
-      <button class="btn secondary" bindtap="chooseAvatar">上传头像</button>
-      <button class="btn" bindtap="register">注册并登录</button>
-    </view>
-  </view>
-
-  <view class="content" wx:elif="{{!space}}">
-    <view class="card profile-card">
-      <image class="avatar" src="{{user.avatarUrl || 'https://dummyimage.com/120x120/f2f2f2/999&text=+'}}" mode="aspectFill" />
-      <view class="name">{{user.nickname}}</view>
-      <button size="mini" class="btn secondary" bindtap="chooseAvatar">更换头像</button>
+      <view class="meta">Operator: {{user.nickname}} | 绑定码: {{space.code}}</view>
     </view>
 
+    <view class="section-title">自定义任务 <text class="badge">{{space.tasks.length}}</text></view>
     <view class="card">
-      <view class="section-title">创建 / 加入成长空间</view>
-      <button class="btn" bindtap="createGrowthSpace">创建成长空间并生成绑定码</button>
-      <input class="input" placeholder="输入绑定码加入" value="{{joinCode}}" bindinput="onCodeInput" />
-      <button class="btn secondary" bindtap="joinGrowthSpace">通过绑定码加入</button>
-    </view>
-  </view>
-
-  <view class="content" wx:else>
-    <view class="card">
-      <view class="section-title">我的成长空间</view>
-      <view class="hint">绑定码：<text class="code">{{space.code}}</text></view>
-      <view class="hint">成员数：{{memberCount}}</view>
+      <input class="input" placeholder="任务标题" value="{{taskTitle}}" bindinput="onTaskTitleInput" />
+      <input class="input" type="number" placeholder="积分（默认1）" value="{{taskPoints}}" bindinput="onTaskPointsInput" />
+      <button class="btn" bindtap="addTaskItem">+ 新增自定义任务</button>
     </view>
 
-    <view class="card">
-      <view class="section-title">待打卡事件</view>
-      <view class="row">
-        <input class="input inline" placeholder="事件标题" value="{{taskTitle}}" bindinput="onTaskTitleInput" />
-        <input class="input inline points" type="number" value="{{taskPoints}}" bindinput="onTaskPointsInput" />
-      </view>
-      <button class="btn" bindtap="addTaskItem">新增事件</button>
-    </view>
-
+    <view class="section-title">待打卡 <text class="badge">{{space.tasks.length}}</text></view>
     <view class="task-card" wx:for="{{space.tasks}}" wx:key="id">
       <view class="task-title">{{item.title}}</view>
-      <view class="hint">每次打卡 +{{item.points}} 分 · 总打卡 {{item.doneCount}} 次</view>
+      <view class="task-desc">💗 +{{item.points}} 分 · 总 {{item.doneCount}} 次</view>
       <view class="actions">
         <button size="mini" class="btn-mini" data-id="{{item.id}}" bindtap="doCheckIn">打卡+1</button>
-        <button size="mini" class="btn-mini secondary" data-id="{{item.id}}" bindtap="undoCheckIn">删除1次</button>
-        <button size="mini" class="btn-mini secondary" data-id="{{item.id}}" data-title="{{item.title}}" data-points="{{item.points}}" bindtap="beginEditTask">修改</button>
-        <button size="mini" class="btn-mini danger" data-id="{{item.id}}" bindtap="removeTask">删除事件</button>
+        <button size="mini" class="btn-mini second" data-id="{{item.id}}" bindtap="undoCheckIn">删除1次</button>
+        <button size="mini" class="btn-mini second" data-id="{{item.id}}" data-title="{{item.title}}" data-points="{{item.points}}" bindtap="beginEditTask">修改</button>
+        <button size="mini" class="btn-mini danger" data-id="{{item.id}}" bindtap="removeTask">删除任务</button>
       </view>
     </view>
 
     <view class="card" wx:if="{{editTaskId}}">
-      <view class="section-title">修改事件</view>
+      <view class="section-title">修改任务</view>
       <input class="input" value="{{editTaskTitle}}" bindinput="onEditTaskTitleInput" />
       <input class="input" type="number" value="{{editTaskPoints}}" bindinput="onEditTaskPointsInput" />
       <button class="btn" bindtap="saveEditTask">保存修改</button>

@@ -1,42 +1,20 @@
-const USER_KEY = 'growth_user_v1';
-const SPACES_KEY = 'growth_spaces_v1';
-const ACTIVE_SPACE_KEY = 'growth_active_space_v1';
+const USER_KEY = 'growth_user_v2';
+const SPACES_KEY = 'growth_spaces_v2';
+const ACTIVE_SPACE_KEY = 'growth_active_space_v2';
 
 function getCurrentUser() {
   return wx.getStorageSync(USER_KEY) || null;
 }
 
-function registerUser({ nickname, avatarUrl }) {
+function saveCurrentUser(profile) {
   const user = {
-    id: `u_${Date.now()}`,
-    nickname,
-    avatarUrl: avatarUrl || '',
-    createdAt: Date.now()
+    id: (getCurrentUser() && getCurrentUser().id) || `u_${Date.now()}`,
+    nickname: profile.nickName || profile.nickname || '微信用户',
+    avatarUrl: profile.avatarUrl || '',
+    updatedAt: Date.now()
   };
   wx.setStorageSync(USER_KEY, user);
   return user;
-}
-
-function updateCurrentUser(patch) {
-  const user = getCurrentUser();
-  if (!user) return null;
-  const next = { ...user, ...patch };
-  wx.setStorageSync(USER_KEY, next);
-
-  const code = wx.getStorageSync(ACTIVE_SPACE_KEY);
-  if (code) {
-    const spaces = getSpaces();
-    const idx = spaces.findIndex((item) => item.code === code);
-    if (idx >= 0 && spaces[idx].members[user.id]) {
-      spaces[idx].members[user.id] = {
-        ...spaces[idx].members[user.id],
-        nickname: next.nickname,
-        avatarUrl: next.avatarUrl
-      };
-      saveSpaces(spaces);
-    }
-  }
-  return next;
 }
 
 function getSpaces() {
@@ -45,6 +23,20 @@ function getSpaces() {
 
 function saveSpaces(spaces) {
   wx.setStorageSync(SPACES_KEY, spaces);
+}
+
+function getActiveSpaceCode() {
+  return wx.getStorageSync(ACTIVE_SPACE_KEY) || '';
+}
+
+function setActiveSpaceCode(code) {
+  wx.setStorageSync(ACTIVE_SPACE_KEY, code);
+}
+
+function getActiveSpace() {
+  const code = getActiveSpaceCode();
+  if (!code) return null;
+  return getSpaces().find((item) => item.code === code) || null;
 }
 
 function randomCode() {
@@ -67,41 +59,36 @@ function createSpace(owner) {
     deletedCheckins: 0,
     createdAt: Date.now()
   };
+
   spaces.unshift(space);
   saveSpaces(spaces);
-  wx.setStorageSync(ACTIVE_SPACE_KEY, code);
+  setActiveSpaceCode(code);
   return space;
 }
 
 function joinSpace(code, user) {
+  const targetCode = (code || '').trim().toUpperCase();
   const spaces = getSpaces();
-  const idx = spaces.findIndex((item) => item.code === code.trim().toUpperCase());
+  const idx = spaces.findIndex((item) => item.code === targetCode);
   if (idx < 0) return null;
   spaces[idx].members[user.id] = {
     nickname: user.nickname,
     avatarUrl: user.avatarUrl
   };
   saveSpaces(spaces);
-  wx.setStorageSync(ACTIVE_SPACE_KEY, spaces[idx].code);
+  setActiveSpaceCode(targetCode);
   return spaces[idx];
 }
 
-function getActiveSpace() {
-  const code = wx.getStorageSync(ACTIVE_SPACE_KEY);
-  if (!code) return null;
-  return getSpaces().find((item) => item.code === code) || null;
-}
-
 function updateActiveSpace(updater) {
-  const code = wx.getStorageSync(ACTIVE_SPACE_KEY);
+  const code = getActiveSpaceCode();
   if (!code) return null;
   const spaces = getSpaces();
   const idx = spaces.findIndex((item) => item.code === code);
   if (idx < 0) return null;
-  const next = updater({ ...spaces[idx] });
-  spaces[idx] = next;
+  spaces[idx] = updater({ ...spaces[idx] });
   saveSpaces(spaces);
-  return next;
+  return spaces[idx];
 }
 
 function addTask(task) {
@@ -149,17 +136,19 @@ function checkInTask(taskId, userId) {
 
 function undoCheckInTask(taskId, userId) {
   return updateActiveSpace((space) => {
+    let removed = false;
     space.tasks = space.tasks.map((item) => {
       if (item.id !== taskId) return item;
       const current = item.checkinsByUser[userId] || 0;
       if (current <= 0) return item;
+      removed = true;
       return {
         ...item,
         doneCount: Math.max(0, item.doneCount - 1),
         checkinsByUser: { ...item.checkinsByUser, [userId]: current - 1 }
       };
     });
-    space.deletedCheckins += 1;
+    if (removed) space.deletedCheckins += 1;
     return space;
   });
 }
@@ -191,26 +180,31 @@ function deleteReward(rewardId) {
 }
 
 function getMemberPanels(space) {
-  const members = Object.keys(space.members).map((id) => ({ id, ...space.members[id] }));
-  return members.map((member) => {
-    let points = 0;
+  return Object.keys(space.members).map((id) => {
+    const member = space.members[id];
     let checkins = 0;
+    let points = 0;
     space.tasks.forEach((task) => {
-      const c = task.checkinsByUser[member.id] || 0;
-      checkins += c;
-      points += c * task.points;
+      const count = task.checkinsByUser[id] || 0;
+      checkins += count;
+      points += count * task.points;
     });
-    return { ...member, points, checkins };
+    return {
+      id,
+      nickname: member.nickname,
+      avatarUrl: member.avatarUrl,
+      checkins,
+      points
+    };
   });
 }
 
 module.exports = {
   getCurrentUser,
-  registerUser,
-  updateCurrentUser,
+  saveCurrentUser,
+  getActiveSpace,
   createSpace,
   joinSpace,
-  getActiveSpace,
   addTask,
   updateTask,
   deleteTask,
