@@ -1,4 +1,6 @@
-const RECORD_KEY = 'clockin_records_v2';
+const RECORD_KEY = 'couple_growth_records_v2';
+const REPAIR_KEY = 'couple_repair_records_v1';
+const PROFILE_KEY = 'couple_profile_v1';
 
 function getRecords() {
   return wx.getStorageSync(RECORD_KEY) || [];
@@ -9,16 +11,34 @@ function saveRecords(records) {
 }
 
 function addRecord(record) {
-  const records = getRecords();
-  records.unshift(record);
-  saveRecords(records);
-  return records;
+  const list = getRecords();
+  list.unshift(record);
+  saveRecords(list);
+  return list;
 }
 
-function removeRecord(id) {
-  const records = getRecords().filter((item) => item.id !== id);
-  saveRecords(records);
-  return records;
+function getRepairRecords() {
+  return wx.getStorageSync(REPAIR_KEY) || [];
+}
+
+function addRepairRecord(record) {
+  const list = getRepairRecords();
+  list.unshift(record);
+  wx.setStorageSync(REPAIR_KEY, list);
+  return list;
+}
+
+function getProfile() {
+  return (
+    wx.getStorageSync(PROFILE_KEY) || {
+      anniversaryDate: '2024-01-01',
+      nextMilestone: '02-14'
+    }
+  );
+}
+
+function saveProfile(profile) {
+  wx.setStorageSync(PROFILE_KEY, profile);
 }
 
 function summaryByDate(records) {
@@ -28,9 +48,10 @@ function summaryByDate(records) {
   }, {});
 }
 
-function summaryByTag(records) {
+function summaryByType(records) {
   return records.reduce((acc, item) => {
-    acc[item.tag] = (acc[item.tag] || 0) + 1;
+    const key = item.type || 'growth';
+    acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
 }
@@ -38,7 +59,10 @@ function summaryByTag(records) {
 module.exports = {
   getRecords,
   addRecord,
-  removeRecord,
+  getRepairRecords,
+  addRepairRecord,
+  getProfile,
+  saveProfile,
   summaryByDate,
-  summaryByTag
+  summaryByType
 };

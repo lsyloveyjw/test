@@ -1,29 +1,32 @@
 <view class="container">
-  <view class="card header">
-    <view class="title">🌈 Rainbow Cats 打卡记事</view>
-    <view class="subtitle">今日已完成 {{todayCount}} 次，坚持就会发光。</view>
+  <view class="card hero">
+    <view class="title">💞 我们的成长系统</view>
+    <view class="sub">在一起第 {{loveDays}} 天 · 下个纪念日倒计时 {{countdownDays}} 天</view>
+    <view class="sub">今日成长 {{todayGrowthCount}} 条 · 修复 {{todayRepairCount}} 条</view>
   </view>
 
   <view class="card">
-    <view class="section-title">1) 选择打卡分类</view>
-    <view class="tags">
-      <view wx:for="{{tags}}" wx:key="*this" class="tag {{selectedTag === item ? 'tag-active' : ''}}" bindtap="onTagTap" data-tag="{{item}}">{{item}}</view>
-    </view>
-
-    <view class="section-title">2) 选择心情</view>
-    <view class="moods">
-      <view wx:for="{{moods}}" wx:key="*this" class="mood {{mood === item ? 'mood-active' : ''}}" bindtap="onMoodTap" data-mood="{{item}}">{{item}}</view>
-    </view>
-
-    <view class="section-title">3) 记录备注</view>
-    <textarea class="note" maxlength="200" placeholder="比如：完成了 30 分钟英语听力" value="{{note}}" bindinput="onNoteInput" />
-
-    <button class="btn-primary" bindtap="handleClockIn">立即打卡</button>
+    <view class="label">纪念日配置</view>
+    <input class="input" placeholder="恋爱开始日 YYYY-MM-DD" value="{{profile.anniversaryDate}}" bindinput="onAnniversaryInput" />
+    <input class="input" placeholder="下个纪念日 MM-DD" value="{{profile.nextMilestone}}" bindinput="onMilestoneInput" />
+    <button class="btn-secondary" bindtap="saveProfileConfig">保存纪念日</button>
   </view>
 
-  <view class="card" wx:if="{{latestRecord}}">
-    <view class="section-title">最近记录</view>
-    <view>{{latestRecord.mood}} {{latestRecord.tag}} · {{latestRecord.note || '无备注'}}</view>
-    <view class="time">{{latestRecord.date}} {{latestRecord.time}}</view>
+  <view class="card">
+    <view class="label">成长记录</view>
+    <view class="chips">
+      <view wx:for="{{users}}" wx:key="key" class="chip {{selectedUser===item.key?'active':''}}" data-user="{{item.key}}" bindtap="onUserTap">{{item.label}}</view>
+    </view>
+    <view class="chips">
+      <view wx:for="{{tags}}" wx:key="*this" class="chip {{selectedTag===item?'active':''}}" data-tag="{{item}}" bindtap="onTagTap">{{item}}</view>
+    </view>
+    <textarea class="note" placeholder="记录今天一起变好的瞬间..." value="{{note}}" bindinput="onNoteInput" />
+    <button class="btn-primary" bindtap="submitGrowth">保存成长记录</button>
+  </view>
+
+  <view class="card">
+    <view class="label">争吵后修复记录</view>
+    <textarea class="note" placeholder="例如：先冷静，再沟通，最后拥抱和解" value="{{repairNote}}" bindinput="onRepairInput" />
+    <button class="btn-primary" bindtap="submitRepair">保存修复记录</button>
   </view>
 </view>
