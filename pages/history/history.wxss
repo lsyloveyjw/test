@@ -1,6 +1,13 @@
-.container { padding:24rpx; background:#fff7fb; }
-.card { background:#fff; border-radius:20rpx; padding:20rpx; margin-bottom:16rpx; }
-.tabs { display:flex; gap:10rpx; }
-.tab { flex:1; text-align:center; padding:12rpx 0; border-radius:12rpx; background:#fff1f6; color:#ff628c; }
-.tab-active { background:#ff6f95; color:#fff; }
-.time { color:#888; font-size:24rpx; margin-top:8rpx; }
+page { background:#f3f3f3; }
+.topbar { background:#f79ab2; padding:24rpx; padding-top:48rpx; }
+.title { text-align:center; font-size:46rpx; font-weight:700; }
+.content { padding:20rpx; }
+.search { background:#fff; border-radius:14rpx; padding:12rpx 16rpx; margin-bottom:18rpx; }
+.group-title { font-size:34rpx; color:#666; margin: 12rpx 0; }
+.badge { background:#ff5b6a; color:#fff; border-radius:999rpx; padding:0 12rpx; font-size:24rpx; }
+.list-card { background:#fff; border-radius:20rpx; padding:6rpx 14rpx; margin-bottom:18rpx; }
+.item { display:flex; justify-content:space-between; padding:14rpx 6rpx; border-bottom:1px solid #f1f1f1; }
+.item:last-child { border-bottom:none; }
+.name { font-size:34rpx; font-weight:700; color:#222; }
+.meta,.date { color:#888; font-size:24rpx; margin-top:4rpx; }
+.icon { font-size:46rpx; align-self:center; }

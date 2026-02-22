@@ -1,32 +1,33 @@
-<view class="container">
-  <view class="card hero">
-    <view class="title">💞 我们的成长系统</view>
-    <view class="sub">在一起第 {{loveDays}} 天 · 下个纪念日倒计时 {{countdownDays}} 天</view>
-    <view class="sub">今日成长 {{todayGrowthCount}} 条 · 修复 {{todayRepairCount}} 条</view>
+<view class="page">
+  <view class="topbar">
+    <view class="title">成长打卡中心</view>
   </view>
 
-  <view class="card">
-    <view class="label">纪念日配置</view>
-    <input class="input" placeholder="恋爱开始日 YYYY-MM-DD" value="{{profile.anniversaryDate}}" bindinput="onAnniversaryInput" />
-    <input class="input" placeholder="下个纪念日 MM-DD" value="{{profile.nextMilestone}}" bindinput="onMilestoneInput" />
-    <button class="btn-secondary" bindtap="saveProfileConfig">保存纪念日</button>
-  </view>
-
-  <view class="card">
-    <view class="label">成长记录</view>
-    <view class="chips">
-      <view wx:for="{{users}}" wx:key="key" class="chip {{selectedUser===item.key?'active':''}}" data-user="{{item.key}}" bindtap="onUserTap">{{item.label}}</view>
+  <view class="content">
+    <view class="card">
+      <view class="section-title">成长者筛选</view>
+      <view class="chips">
+        <view wx:for="{{ownerList}}" wx:key="*this" class="chip {{owner===item?'active':''}}" data-owner="{{item}}" bindtap="switchOwner">{{item}}</view>
+      </view>
+      <view class="hint">已启用单人代管，可在 A / B 间切换</view>
     </view>
-    <view class="chips">
-      <view wx:for="{{tags}}" wx:key="*this" class="chip {{selectedTag===item?'active':''}}" data-tag="{{item}}" bindtap="onTagTap">{{item}}</view>
-    </view>
-    <textarea class="note" placeholder="记录今天一起变好的瞬间..." value="{{note}}" bindinput="onNoteInput" />
-    <button class="btn-primary" bindtap="submitGrowth">保存成长记录</button>
-  </view>
 
-  <view class="card">
-    <view class="label">争吵后修复记录</view>
-    <textarea class="note" placeholder="例如：先冷静，再沟通，最后拥抱和解" value="{{repairNote}}" bindinput="onRepairInput" />
-    <button class="btn-primary" bindtap="submitRepair">保存修复记录</button>
+    <view class="card">
+      <view class="section-title">纪念日设置</view>
+      <input class="input" value="{{profile.anniversaryDate}}" bindinput="onAnniversaryInput" placeholder="恋爱开始日 YYYY-MM-DD"/>
+      <input class="input" value="{{profile.nextMilestone}}" bindinput="onMilestoneInput" placeholder="下个纪念日 MM-DD"/>
+      <view class="summary">在一起 {{loveDays}} 天 · 距离纪念日 {{countdownDays}} 天</view>
+      <button class="btn" bindtap="saveDates">保存纪念日</button>
+    </view>
+
+    <view class="section-head">待打卡 <text class="badge">{{tasks.length}}</text></view>
+    <view class="task-card" wx:for="{{tasks}}" wx:key="id">
+      <view class="task-title">{{item.title}}</view>
+      <view class="task-desc">{{item.desc}}</view>
+      <view class="task-foot">
+        <text>💗 +{{item.points}} 分 · 第 {{item.done + 1}}/{{item.target}} 次</text>
+        <button size="mini" class="btn-mini" data-id="{{item.id}}" bindtap="finishTask" disabled="{{item.done >= item.target}}">打卡</button>
+      </view>
+    </view>
   </view>
 </view>

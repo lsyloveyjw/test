@@ -1,21 +1,30 @@
-<view class="container">
-  <view class="tabs card">
-    <view class="tab {{tab==='growth'?'tab-active':''}}" data-tab="growth" bindtap="onTabTap">成长时间轴</view>
-    <view class="tab {{tab==='repair'?'tab-active':''}}" data-tab="repair" bindtap="onTabTap">修复时间轴</view>
-  </view>
+<view class="page">
+  <view class="topbar"><view class="title">成长商城</view></view>
+  <view class="content">
+    <input class="search" placeholder="搜索商品" bindinput="onSearch" />
 
-  <view class="card" wx:if="{{tab==='growth' && growthRecords.length===0}}">暂无成长记录</view>
-  <view class="card" wx:if="{{tab==='repair' && repairRecords.length===0}}">暂无修复记录</view>
+    <view class="group-title">货架 <text class="badge">{{onlineItems.length}}</text></view>
+    <view class="list-card">
+      <view class="item" wx:for="{{onlineItems}}" wx:key="id">
+        <view>
+          <view class="name">{{item.title}}</view>
+          <view class="meta">💰 {{item.points}} 积分</view>
+          <view class="date">📅 {{item.date}} 创建</view>
+        </view>
+        <view class="icon">{{item.icon}}</view>
+      </view>
+    </view>
 
-  <view class="card" wx:if="{{tab==='growth'}}" wx:for="{{growthRecords}}" wx:key="id">
-    <view>{{item.user==='me'?'我':'TA'}} · {{item.tag}}</view>
-    <view>{{item.note || '无备注'}}</view>
-    <view class="time">{{item.date}} {{item.time}}</view>
-  </view>
-
-  <view class="card" wx:if="{{tab==='repair'}}" wx:for="{{repairRecords}}" wx:key="id">
-    <view>🫶 {{item.user==='me'?'我':'TA'}} 的修复记录</view>
-    <view>{{item.note}}</view>
-    <view class="time">{{item.date}} {{item.time}}</view>
+    <view class="group-title">已下架 <text class="badge">{{offlineItems.length}}</text></view>
+    <view class="list-card">
+      <view class="item" wx:for="{{offlineItems}}" wx:key="id">
+        <view>
+          <view class="name">{{item.title}}</view>
+          <view class="meta">💰 {{item.points}} 积分</view>
+          <view class="date">📅 {{item.date}} 创建</view>
+        </view>
+        <view class="icon">{{item.icon}}</view>
+      </view>
+    </view>
   </view>
 </view>

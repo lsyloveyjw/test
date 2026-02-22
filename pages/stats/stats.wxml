@@ -1,30 +1,28 @@
-<view class="container">
-  <view class="card">
-    <view class="k">关系温度</view>
-    <view class="big">{{relationScore}} 分</view>
-    <view class="tip">在一起第 {{loveDays}} 天 · 下个纪念日 {{countdownDays}} 天后</view>
-  </view>
+<view class="page">
+  <view class="topbar"><view class="title">成长分析</view></view>
 
-  <view class="grid">
-    <view class="card"><view class="k">成长记录</view><view class="v">{{growthTotal}}</view></view>
-    <view class="card"><view class="k">修复记录</view><view class="v">{{repairTotal}}</view></view>
-    <view class="card full"><view class="k">连续互动</view><view class="v">{{streak}} 天</view></view>
-  </view>
+  <view class="content">
+    <view class="card">
+      <view class="periods">
+        <view wx:for="{{periods}}" wx:key="*this" class="pill {{activePeriod===item?'pill-active':''}}" data-p="{{item}}" bindtap="switchPeriod">{{item}}</view>
+      </view>
 
-  <view class="card">
-    <view class="k">类型分布</view>
-    <view wx:for="{{typeSummary}}" wx:key="type" class="row">
-      <text>{{item.type}}</text>
-      <text>{{item.count}} 次</text>
+      <view class="line">{{aName}}：{{activePeriod}} 科技树 +{{aTech}} 分 · 情感树 +{{aEmotion}} 分</view>
+      <view class="line">{{bName}}：{{activePeriod}} 科技树 +{{bTech}} 分 · 情感树 +{{bEmotion}} 分</view>
+
+      <view class="compare">进步对比（{{activePeriod}}）</view>
+      <view class="small">科技树对比线</view>
+      <view class="bar-bg"><view class="bar a" style="width: {{(aTech/(aTech+bTech||1))*100}}%"></view></view>
+      <view class="small">情感树对比线</view>
+      <view class="bar-bg"><view class="bar b" style="width: {{(aEmotion/(aEmotion+bEmotion||1))*100}}%"></view></view>
     </view>
-  </view>
 
-  <view class="card">
-    <view class="k">最近14天趋势</view>
-    <view wx:if="{{recentTrend.length===0}}" class="empty">暂无数据</view>
-    <view wx:for="{{recentTrend}}" wx:key="date" class="row">
-      <text>{{item.date}}</text>
-      <text>{{item.count}} 次</text>
+    <view class="card">
+      <view class="panel-title">💰 我的成长面板</view>
+      <view>用户：{{aName}}</view>
+      <view class="line2">科技树：{{aTech}} 分</view>
+      <view class="line2">情感树：{{aEmotion}} 分</view>
+      <view class="line2">合计：{{aTech + aEmotion}} 分</view>
     </view>
   </view>
 </view>
