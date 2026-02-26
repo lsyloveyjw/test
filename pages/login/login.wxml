@@ -1,0 +1,14 @@
+<view class="login-page">
+  <image class="bg" src="https://dummyimage.com/750x1334/e8f6d8/9dbf88&text=Growth+Space" mode="aspectFill" />
+  <view class="mask-card">
+    <view class="title">欢迎您 👋</view>
+    <view class="sub">进入成长空间前，请先使用微信资料登录。</view>
+    <view class="user-box" wx:if="{{user}}">
+      <image class="avatar" src="{{user.avatarUrl}}" mode="aspectFill" />
+      <view>{{user.nickname}}</view>
+    </view>
+    <button class="btn-login" bindtap="handleWxLogin">立即登录（微信头像昵称）</button>
+    <button class="btn-ghost" bindtap="goNext">继续进入</button>
+    <view class="agreement">登录即默认同意《隐私协议》与《服务协议》</view>
+  </view>
+</view>

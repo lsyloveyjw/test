@@ -1,0 +1,15 @@
+page { background:#f3f3f3; font-family:'YouYuan','PingFang SC','Comic Sans MS',sans-serif; }
+.topbar { background:#f79ab2; padding:28rpx 24rpx; padding-top:52rpx; }
+.title { text-align:center; font-size:48rpx; font-weight:700; }
+.content { padding:20rpx; }
+.card,.banner { background:#fff; border-radius:24rpx; padding:20rpx; margin-bottom:16rpx; }
+.code { color:#f0467b; font-weight:700; }
+.periods { display:flex; gap:10rpx; margin-bottom:16rpx; }
+.pill { flex:1; text-align:center; padding:10rpx 0; border:1px solid #ddd; border-radius:999rpx; color:#444; background:#fff; }
+.pill-active { background:#111; color:#fff; border-color:#111; }
+.panel { display:flex; align-items:center; gap:12rpx; padding:12rpx 0; border-bottom:1px solid #f1f1f1; }
+.panel:last-child { border-bottom:none; }
+.avatar { width:88rpx; height:88rpx; border-radius:50%; background:#eee; }
+.name { font-size:32rpx; font-weight:700; }
+.meta { color:#666; margin-top:4rpx; }
+.exit-btn { margin-top:12rpx; background:#111; color:#fff; border:none; }
